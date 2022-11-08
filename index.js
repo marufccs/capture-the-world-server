@@ -9,17 +9,32 @@ app.use(cors());
 app.use(express.json());
 
 //connection with mongodb
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.19qwu6y.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 const main = async() => {
 try{
 const database = client.db("photography").collection("services");
+const database2 = client.db("photography").collection("firstServices");
+
+app.get('/allServices', async(req,res) => {
+    const query = {};
+    const cursor = database.find(query);
+    const result = await cursor.toArray();
+    res.send(result);
+})
+
+app.get('/allServices/:id', async(req, res) => {
+    const id = req.params.id;
+    const query = {_id:ObjectId(id)};
+    const result = await database.findOne(query);
+    res.send(result);
+})
 
 app.get('/services', async(req,res) => {
     const query = {};
-    const cursor = database.find(query);
+    const cursor = database2.find(query);
     const result = await cursor.toArray();
     res.send(result);
 })
