@@ -47,6 +47,12 @@ res.send(result);
 console.log(result);
 })
 
+app.get('/reviews', async(req, res) => {
+    const query = {};
+    const cursor = database3.find(query);
+    const reviews = await cursor.toArray();
+    res.send(reviews)
+})
 }
 catch(error){
 console.log(error.name, error.message, error.stack);
