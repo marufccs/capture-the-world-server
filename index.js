@@ -17,6 +17,7 @@ const main = async() => {
 try{
 const database = client.db("photography").collection("services");
 const database2 = client.db("photography").collection("firstServices");
+const database3 = client.db("photography").collection("reviews");
 
 app.get('/allServices', async(req,res) => {
     const query = {};
@@ -27,7 +28,7 @@ app.get('/allServices', async(req,res) => {
 
 app.get('/allServices/:id', async(req, res) => {
     const id = req.params.id;
-    const query = {_id:ObjectId(id)};
+    const query = {_id: ObjectId(id)};
     const result = await database.findOne(query);
     res.send(result);
 })
@@ -38,6 +39,14 @@ app.get('/services', async(req,res) => {
     const result = await cursor.toArray();
     res.send(result);
 })
+
+app.post('/reviews', async(req, res) => {
+const review = req.body;
+const result = await database3.insertOne(review);
+res.send(result);
+console.log(result);
+})
+
 }
 catch(error){
 console.log(error.name, error.message, error.stack);
