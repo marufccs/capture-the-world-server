@@ -40,12 +40,14 @@ app.get('/services', async(req,res) => {
     res.send(result);
 })
 
+//Write a review
 app.post('/reviews', async(req, res) => {
 const review = req.body;
 const result = await database3.insertOne(review);
 res.send(result);
 })
 
+//Query by email and service id 
 app.get('/reviews', async(req, res) => {
     const email = req.query.email;
     const serviceId = req.query.serviceId;
@@ -65,12 +67,22 @@ app.get('/reviews', async(req, res) => {
     res.send(reviews)
 })
 
+//Delete the specific review
 app.delete('/reviews/:id', async(req, res) => {
 const id = req.params.id;
 const query = {_id : ObjectId(id)};
 const result = await database3.deleteOne(query);
 res.send(result);
 })
+
+//Add new service
+app.post('/allServices', async(req, res) => {
+const service = req.body;
+const result = await database.insertOne(service);
+res.send(result);
+})
+
+
 }
 catch(error){
 console.log(error.name, error.message, error.stack);
