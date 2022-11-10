@@ -64,6 +64,13 @@ app.get('/reviews', async(req, res) => {
     const reviews = await cursor.toArray();
     res.send(reviews)
 })
+
+app.delete('/reviews/:id', async(req, res) => {
+const id = req.params.id;
+const query = {_id : ObjectId(id)};
+const result = await database3.deleteOne(query);
+res.send(result);
+})
 }
 catch(error){
 console.log(error.name, error.message, error.stack);
