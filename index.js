@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const jwt = require('jsonwebtoken');
 const port = process.env.PORT|| 5000;
 require('dotenv').config(); 
 
@@ -12,6 +13,7 @@ app.use(express.json());
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.19qwu6y.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
 
 const main = async() => {
 try{
@@ -48,7 +50,7 @@ res.send(result);
 })
 
 //Query by email and service id 
-app.get('/reviews', async(req, res) => {
+app.get('/reviews',  async(req, res) => {
     const email = req.query.email;
     const serviceId = req.query.serviceId;
     let query = {};
@@ -82,6 +84,12 @@ const result = await database.insertOne(service);
 res.send(result);
 })
 
+//jwt 
+app.post('/jwt', (req, res) => {
+    const user = req.body;
+    const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+    res.send({token});
+})
 
 }
 catch(error){
