@@ -46,37 +46,24 @@ const result = await database3.insertOne(review);
 res.send(result);
 })
 
-// app.get('/reviews', async(req, res) => {
-//     const query = {};
-//     const cursor = database3.find(query);
-//     const reviews = await cursor.toArray();
-//     res.send(reviews)
-// })
-
 app.get('/reviews', async(req, res) => {
+    const email = req.query.email;
+    const serviceId = req.query.serviceId;
     let query = {};
-    if(req.query.serviceId){
+    if(email ){
         query = {
-            serviceId: req.query.serviceId
+            email: email
+        }
+    }
+    else if(serviceId){
+        query = {
+            serviceId : serviceId
         }
     }
     const cursor = database3.find(query);
     const reviews = await cursor.toArray();
     res.send(reviews)
 })
-
-app.get('/reviews', async(req, res) => {
-    let query = {};
-    if(req.query.email){
-        query = {
-            email: req.query.email
-        }
-    }
-    const cursor = database3.find(query);
-    const reviews = await cursor.toArray();
-    res.send(reviews)
-})
-
 }
 catch(error){
 console.log(error.name, error.message, error.stack);
